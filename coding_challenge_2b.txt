@@ -1,0 +1,32 @@
+// Inventory Reorder Assistant for "World Cup Soccer Ball 2026"
+// Keeps types explicit, guards division-by-zero, uses Math.max() and Math.ceil().
+
+const itemName = "World Cup Soccer Ball 2026"; // string
+
+// Numbers (edit to model your real scenario)
+const unitCost = 18.00;               // number: cost per unit ($)
+const currentStock = 320;             // number: units currently on hand
+const reorderLevel = 100;             // number: threshold to consider reordering
+const targetStock = 500;              // number: desired on-hand after reorder
+const weeklyDemand = 75;              // number: average units sold per week
+const supplierLeadTimeWeeks = 4;      // number: lead time in weeks to receive an order
+
+// Calculations
+const weeksOfCover = weeklyDemand > 0 ? currentStock / weeklyDemand : Infinity;
+const stockDeficit = Math.max(0, targetStock - currentStock);
+const reorderNow = currentStock <= reorderLevel || weeksOfCover < supplierLeadTimeWeeks;
+const reorderQuantity = reorderNow ? Math.ceil(stockDeficit) : 0;
+const estimatedReorderCost = reorderQuantity * unitCost;
+
+// Console output (readable and formatted)
+console.log("Item:                         ", itemName);
+console.log(
+  "Weeks of cover:               ",
+  Number.isFinite(weeksOfCover) ? weeksOfCover.toFixed(2) : "Infinity"
+);
+console.log("Reorder now?:                 ", reorderNow);
+console.log("Recommended reorder quantity: ", reorderQuantity);
+console.log(
+  "Estimated reorder cost:       $",
+  estimatedReorderCost.toFixed(2)
+);
